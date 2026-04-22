@@ -140,9 +140,9 @@ npx react-native run-android
 
 ## Demo
 
-First Video: https://drive.google.com/file/d/1_aPl_KblIwDeNZCyEdfsZ3Ki6YU2XuLZ/view?usp=sharing
+- [Demo Video 1](https://drive.google.com/file/d/1_aPl_KblIwDeNZCyEdfsZ3Ki6YU2XuLZ/view?usp=sharing)
+- [Demo Video 2](https://drive.google.com/file/d/1jyjXn0Z-sJkRSziFkpz3S0EqM6uHwI8g/view?usp=sharing)
 
-Second Video: https://drive.google.com/file/d/1jyjXn0Z-sJkRSziFkpz3S0EqM6uHwI8g/view?usp=sharing
 ---
 
 ## Mock Data
