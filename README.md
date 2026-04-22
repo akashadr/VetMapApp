@@ -1,97 +1,151 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# VetMapApp — Veterinary Clinic Discovery
 
-# Getting Started
+A React Native CLI application for discovering veterinary clinics using an Airbnb-style map + bottom sheet pattern, built for the Yosemite Crew platform.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## Map SDK: `react-native-maps` (Google Maps)
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+**Why `react-native-maps` over Mapbox:**
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+| Factor | react-native-maps | Mapbox |
+|---|---|---|
+| RN community support | Widest — 14k+ GitHub stars | Smaller RN community |
+| Custom styling | Google Maps JSON style array | Mapbox Studio (more powerful but heavier setup) |
+| iOS setup | CocoaPods, zero extra config | Requires Mapbox token + extra native config |
+| Bundle size | Lighter | Heavier (offline tiles SDK bundled) |
+| Free tier | Generous ($200/mo credit) | More restrictive |
 
-```sh
-# Using npm
-npm start
+For a demo with custom styling and fast setup, `react-native-maps` with a Google Maps JSON style is the right call.
 
-# OR using Yarn
-yarn start
+---
+
+## Custom Map Style
+
+Defined in [`src/theme/mapStyle.ts`](src/theme/mapStyle.ts) — matches the **Yosemite Crew Figma design palette**:
+
+- **Land surface**: Light neutral `#F2F2F2` — matches app background
+- **Roads**: White `#FFFFFF` with `#E0E0E0` strokes — clean, minimal
+- **Water**: Brand blue tint `#BDD9F5` — complements `#247AED` brand blue
+- **Parks**: Soft green `#D4EAD0` — nature context without competing with pins
+- **Labels**: Near-black `#302F2E` (Figma primary/CTA color)
+- **POIs suppressed**: Clinic pins are the only points of interest
+
+---
+
+## Architecture
+
+```
+src/
+├── types/          # Shared TypeScript interfaces (Clinic, Coordinates, etc.)
+├── data/           # 12 realistic mock SF vet clinics
+├── services/       # Pure functions: region filtering, search, distance enrichment
+├── store/          # Zustand store — single source of truth for map/list state
+├── utils/          # distance.ts — pure Haversine: (userCoords, clinicCoords) → km
+├── theme/          # colors.ts, mapStyle.ts, typography.ts
+├── components/
+│   ├── ClinicPin         # Custom map marker (speciality emoji + rating pill)
+│   ├── ClinicCard        # Bottom sheet card
+│   ├── BottomSheetPanel  # @gorhom/bottom-sheet wrapper
+│   ├── SearchBar         # Controlled search input
+│   └── FilterChips       # Horizontal filter row
+├── screens/
+│   ├── MapDiscoveryScreen   # Full-screen map + overlaid search + bottom sheet
+│   └── ClinicDetailScreen   # All clinic fields + Book Appointment CTA
+└── navigation/     # React Navigation stack
 ```
 
-## Step 2: Build and run your app
+**Key decisions:**
+- No business logic in screen components — screens wire store → components only
+- `clinicService.ts` owns all filtering (region bounds, search, open-now)
+- Zustand is the single reactive layer; services are pure functions
+- Distance is a pure utility: `calculateDistance(from, to) → number`
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+---
 
-### Android
+## State Management: Zustand
 
-```sh
-# Using npm
-npm run android
+| | Zustand | Redux | Context API |
+|---|---|---|---|
+| Boilerplate | Minimal | Heavy (actions, reducers, selectors) | Minimal |
+| Re-render control | Granular subscriptions | Requires memoization | Re-renders all consumers |
+| No Provider needed | ✅ | ❌ | ❌ |
+| Frequent updates | Handles well | Handles well | Poor (map region fires constantly) |
 
-# OR using Yarn
-yarn android
+**Why Zustand here**: The map fires `onRegionChangeComplete` continuously while panning — Context would re-render every subscribed component on each event. Zustand's granular subscriptions mean only components that read `visibleClinics` re-render when the region changes. No Provider wrapping, no boilerplate actions/reducers.
+
+---
+
+## Setup
+
+### Prerequisites
+- Node ≥ 22
+- Xcode 15+ (iOS) or Android Studio (Android)
+- CocoaPods: `gem install cocoapods`
+- Google Maps API key (Maps SDK for iOS + Android enabled)
+
+### Install
+
+```bash
+npm install
+cd ios && bundle exec pod install && cd ..
 ```
 
-### iOS
+### Add Google Maps API Key
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+**iOS** — `ios/VetMapApp/AppDelegate.mm`:
+```objc
+#import <GoogleMaps/GoogleMaps.h>
+// Inside didFinishLaunchingWithOptions, before [super application:...]:
+[GMSServices provideAPIKey:@"YOUR_API_KEY"];
 ```
 
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
+**Android** — `android/app/src/main/AndroidManifest.xml`:
+```xml
+<meta-data
+  android:name="com.google.android.geo.API_KEY"
+  android:value="YOUR_API_KEY" />
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Run
 
-```sh
-# Using npm
-npm run ios
+```bash
+# iOS
+npx react-native run-ios
 
-# OR using Yarn
-yarn ios
+# Android
+npx react-native run-android
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+---
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## Features
 
-## Step 3: Modify your app
+| Feature | Status |
+|---|---|
+| Full-screen map with custom palette + custom pins | ✅ |
+| Draggable bottom sheet (collapsed 2 cards / expanded full list) | ✅ |
+| Panning map updates clinic cards | ✅ |
+| Tapping pin brings matching card to focus | ✅ |
+| Search filters both pins and cards simultaneously | ✅ |
+| Location permission denial handled gracefully | ✅ |
+| Clinic detail screen (all fields + distance + Book button) | ✅ |
+| 12 realistic SF veterinary clinics in mock data | ✅ |
+| **Bonus** Filter chips: All / Open Now / By Speciality | ✅ |
+| **Bonus** Pin clustering when zoomed out | ✅ |
+| **Bonus** Camera animates to tapped pin | ✅ |
+| **Bonus** Open clinic address in native Maps app | ✅ |
 
-Now that you have successfully run the app, let's make changes!
+---
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## Demo
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+First Video: https://drive.google.com/file/d/1_aPl_KblIwDeNZCyEdfsZ3Ki6YU2XuLZ/view?usp=sharing
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+Second Video: https://drive.google.com/file/d/1jyjXn0Z-sJkRSziFkpz3S0EqM6uHwI8g/view?usp=sharing
+---
 
-## Congratulations! :tada:
+## Mock Data
 
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+12 realistic San Francisco veterinary clinics covering:
+General Practice · Internal Medicine · Surgery & Orthopedics · Emergency & Critical Care · Integrative Medicine · Dentistry & Dermatology · Preventive Care & Vaccines · Feline & Canine Medicine · Oncology & Imaging · Exotic Animals & Avian · Rehabilitation & Sports Medicine
