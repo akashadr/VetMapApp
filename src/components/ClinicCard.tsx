@@ -4,11 +4,13 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Animated,
 } from 'react-native';
 import { Clinic } from '../types';
 import { Colors } from '../theme/colors';
+import { UIText, FontWeights } from '../theme/typography';
+import { Spacing, Radius, IconSize, Elevation } from '../theme/spacing';
 import { formatDistance } from '../utils/distance';
+import { Badge } from './Badge';
 
 interface ClinicCardProps {
   clinic: Clinic;
@@ -43,27 +45,19 @@ export const ClinicCard: React.FC<ClinicCardProps> = ({
     <TouchableOpacity
       activeOpacity={0.85}
       onPress={() => onPress(clinic)}
-      onLongPress={() => onPressDetail(clinic)}
       style={[styles.card, isSelected && styles.cardSelected]}
     >
-      {/* Icon badge */}
       <View style={[styles.iconBadge, isSelected && styles.iconBadgeSelected]}>
         <Text style={styles.iconText}>{icon}</Text>
       </View>
 
-      {/* Content */}
       <View style={styles.content}>
         <View style={styles.nameRow}>
           <Text style={styles.name} numberOfLines={1}>{clinic.name}</Text>
-          {clinic.isOpenNow ? (
-            <View style={styles.openBadge}>
-              <Text style={styles.openText}>Open</Text>
-            </View>
-          ) : (
-            <View style={styles.closedBadge}>
-              <Text style={styles.closedText}>Closed</Text>
-            </View>
-          )}
+          <Badge
+            label={clinic.isOpenNow ? 'Open' : 'Closed'}
+            variant={clinic.isOpenNow ? 'success' : 'default'}
+          />
         </View>
 
         <Text style={styles.speciality} numberOfLines={1}>
@@ -87,7 +81,6 @@ export const ClinicCard: React.FC<ClinicCardProps> = ({
         </Text>
       </View>
 
-      {/* Arrow */}
       <TouchableOpacity
         style={styles.detailArrow}
         onPress={() => onPressDetail(clinic)}
@@ -104,80 +97,50 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.surface,
-    borderRadius: 16,
-    padding: 14,
-    marginHorizontal: 16,
-    marginVertical: 6,
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
-    borderWidth: 1.5,
-    borderColor: Colors.borderLight,
+    borderRadius: Radius.card,
+    padding: Spacing.tightLg,
+    marginHorizontal: Spacing.screenHorizontal,
+    marginBottom: Spacing.component,
+    ...Elevation.outline,            // card outline — border only, no shadow
   },
   cardSelected: {
     borderColor: Colors.accent,
-    shadowOpacity: 0.18,
+    shadowOpacity: 0.14,
     shadowRadius: 12,
     elevation: 6,
   },
   iconBadge: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
+    width: 44,
+    height: 44,
+    borderRadius: Radius.input,      // 12px small card
     backgroundColor: Colors.overlay,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: Spacing.tightLg,
   },
   iconBadgeSelected: {
     backgroundColor: Colors.accentLight + '22',
   },
   iconText: {
-    fontSize: 22,
+    fontSize: IconSize.lg,           // 24px card emoji icon
   },
   content: {
     flex: 1,
-    gap: 3,
+    gap: Spacing.tight / 2,          // 4px title→subtitle (micro tight)
   },
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: Spacing.tight,              // 8px inside name row (tight)
   },
   name: {
     flex: 1,
-    fontSize: 14,
-    fontWeight: '700',
+    ...UIText.subHeadline,           // 15px Medium
     color: Colors.textPrimary,
   },
-  openBadge: {
-    backgroundColor: Colors.accentLight + '33',
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: 6,
-  },
-  openText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: Colors.accentDark,
-  },
-  closedBadge: {
-    backgroundColor: Colors.border,
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: 6,
-  },
-  closedText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: Colors.textMuted,
-  },
   speciality: {
-    fontSize: 12,
+    ...UIText.footnoteEmphasis,      // 13px Medium
     color: Colors.textSecondary,
-    fontWeight: '500',
   },
   metaRow: {
     flexDirection: 'row',
@@ -186,25 +149,24 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   rating: {
-    fontSize: 12,
-    fontWeight: '700',
+    ...UIText.caption,               // 12px Medium
+    fontWeight: FontWeights.semiBold,
     color: Colors.star,
   },
   dot: {
-    fontSize: 12,
+    ...UIText.caption,
     color: Colors.textMuted,
   },
   reviews: {
-    fontSize: 11,
+    ...UIText.caption,               // 12px Medium
     color: Colors.textMuted,
   },
   distance: {
-    fontSize: 11,
+    ...UIText.caption,               // 12px Medium
     color: Colors.accent,
-    fontWeight: '600',
   },
   address: {
-    fontSize: 11,
+    ...UIText.footnote,              // 13px Regular
     color: Colors.textMuted,
     marginTop: 1,
   },

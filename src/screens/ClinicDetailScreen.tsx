@@ -13,7 +13,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types';
 import { Colors } from '../theme/colors';
+import { UIText, Display, FontWeights } from '../theme/typography';
+import { Spacing, Radius, IconSize, Elevation } from '../theme/spacing';
 import { formatDistance } from '../utils/distance';
+import { Badge } from '../components/Badge';
+import { Button } from '../components/Button';
+import { TopNavBar } from '../components/TopNavBar';
 
 type DetailRouteProp = RouteProp<RootStackParamList, 'ClinicDetail'>;
 
@@ -95,21 +100,11 @@ export const ClinicDetailScreen: React.FC = () => {
   );
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      {/* Header */}
-      <View style={styles.headerBar}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backBtn}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <Text style={styles.backIcon}>‹</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle} numberOfLines={1}>
-          Clinic Details
-        </Text>
-        <View style={styles.backBtn} />
-      </View>
+    <View style={styles.container}>
+      <TopNavBar
+        title="Clinic Details"
+        onBack={() => navigation.goBack()}
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -134,22 +129,10 @@ export const ClinicDetailScreen: React.FC = () => {
             <Text style={styles.ratingCount}>({clinic.reviewCount} reviews)</Text>
           </View>
 
-          <View style={styles.statusRow}>
-            <View
-              style={[
-                styles.statusDot,
-                { backgroundColor: clinic.isOpenNow ? Colors.accent : Colors.error },
-              ]}
-            />
-            <Text
-              style={[
-                styles.statusText,
-                { color: clinic.isOpenNow ? Colors.accentDark : Colors.error },
-              ]}
-            >
-              {clinic.isOpenNow ? 'Open Now' : 'Closed'}
-            </Text>
-          </View>
+          <Badge
+            label={clinic.isOpenNow ? 'Open Now' : 'Closed'}
+            variant={clinic.isOpenNow ? 'success' : 'default'}
+          />
         </View>
 
         {/* Info cards */}
@@ -204,13 +187,10 @@ export const ClinicDetailScreen: React.FC = () => {
 
       {/* Book CTA */}
       <View style={[styles.ctaContainer, { paddingBottom: insets.bottom + 16 }]}>
-        <TouchableOpacity
-          style={styles.bookBtn}
+        <Button
+          label="Book Appointment"
           onPress={handleBookAppointment}
-          activeOpacity={0.85}
-        >
-          <Text style={styles.bookBtnText}>Book Appointment</Text>
-        </TouchableOpacity>
+        />
       </View>
     </View>
   );
@@ -221,75 +201,51 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  headerBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: Colors.surface,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
-  },
-  backBtn: {
-    width: 36,
-    alignItems: 'center',
-  },
-  backIcon: {
-    fontSize: 28,
-    color: Colors.primary,
-    fontWeight: '300',
-    lineHeight: 32,
-  },
-  headerTitle: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 16,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-  },
   scrollContent: {
-    paddingBottom: 24,
+    paddingBottom: Spacing.screenVertical,
   },
   hero: {
     backgroundColor: Colors.surface,
     alignItems: 'center',
-    paddingTop: 32,
-    paddingBottom: 24,
-    paddingHorizontal: 24,
+    paddingTop: Spacing.screenVertical,
+    paddingBottom: Spacing.xl,
+    paddingHorizontal: Spacing.screenHorizontal,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
+    borderBottomColor: Colors.border,
   },
   heroIconWrap: {
     width: 80,
     height: 80,
-    borderRadius: 24,
+    borderRadius: Radius.sheet,      // 24px large hero panel
     backgroundColor: Colors.overlay,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
   },
   heroIcon: {
-    fontSize: 36,
+    fontSize: IconSize.lg * 2,       // 48px hero emoji — large surface
   },
   clinicName: {
     fontSize: 22,
-    fontWeight: '800',
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.black,
     color: Colors.textPrimary,
     textAlign: 'center',
     marginBottom: 8,
     letterSpacing: -0.5,
   },
   specialityBadge: {
-    backgroundColor: Colors.primary + '18',
+    backgroundColor: Colors.accent + '18',
     paddingHorizontal: 14,
     paddingVertical: 5,
-    borderRadius: 20,
+    borderRadius: Radius.pill,       // pill badge
     marginBottom: 12,
   },
   specialityText: {
     fontSize: 12,
-    fontWeight: '700',
-    color: Colors.primary,
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.bold,
+    color: Colors.accent,
   },
   ratingRow: {
     flexDirection: 'row',
@@ -303,34 +259,24 @@ const styles = StyleSheet.create({
   },
   ratingValue: {
     fontSize: 15,
-    fontWeight: '800',
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.black,
     color: Colors.textPrimary,
   },
   ratingCount: {
     fontSize: 13,
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.regular,
     color: Colors.textMuted,
   },
-  statusRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  statusText: {
-    fontSize: 13,
-    fontWeight: '700',
-  },
   infoSection: {
-    paddingHorizontal: 16,
-    paddingTop: 24,
+    paddingHorizontal: Spacing.screenHorizontal,
+    paddingTop: Spacing.xl,
   },
   sectionTitle: {
     fontSize: 13,
-    fontWeight: '700',
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.bold,
     color: Colors.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
@@ -338,10 +284,9 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     backgroundColor: Colors.surface,
-    borderRadius: 16,
+    borderRadius: Radius.card,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: Colors.borderLight,
+    ...Elevation.outline,            // card outline — border only
   },
   infoRow: {
     flexDirection: 'row',
@@ -350,23 +295,24 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   infoIconWrap: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
+    width: 44,
+    height: 44,
+    borderRadius: Radius.input,
     backgroundColor: Colors.overlay,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
   },
   infoIcon: {
-    fontSize: 16,
+    fontSize: IconSize.sm,           // 16px inline row icon
   },
   infoContent: {
     flex: 1,
   },
   infoLabel: {
     fontSize: 11,
-    fontWeight: '600',
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.medium,
     color: Colors.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -374,7 +320,8 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.medium,
     color: Colors.textPrimary,
   },
   infoValueLink: {
@@ -387,33 +334,34 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: Colors.borderLight,
+    backgroundColor: Colors.border,
     marginLeft: 64,
   },
   statsRow: {
     flexDirection: 'row',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingTop: 16,
+    gap: Spacing.md,
+    paddingHorizontal: Spacing.screenHorizontal,
+    paddingTop: Spacing.screenHorizontal,
   },
   statCard: {
     flex: 1,
     backgroundColor: Colors.surface,
-    borderRadius: 14,
+    borderRadius: Radius.card,
     alignItems: 'center',
     paddingVertical: 16,
-    borderWidth: 1,
-    borderColor: Colors.borderLight,
+    ...Elevation.outline,            // card outline — border only
   },
   statValue: {
     fontSize: 20,
-    fontWeight: '800',
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.black,
     color: Colors.primary,
     marginBottom: 4,
   },
   statLabel: {
     fontSize: 11,
-    fontWeight: '600',
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.medium,
     color: Colors.textMuted,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -423,27 +371,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    paddingHorizontal: 16,
-    paddingTop: 12,
+    paddingHorizontal: Spacing.screenHorizontal,
+    paddingTop: Spacing.md,
     backgroundColor: Colors.surface,
     borderTopWidth: 1,
-    borderTopColor: Colors.borderLight,
-  },
-  bookBtn: {
-    backgroundColor: Colors.primary,
-    borderRadius: 16,
-    paddingVertical: 16,
-    alignItems: 'center',
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
-    elevation: 6,
-  },
-  bookBtnText: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: Colors.textInverse,
-    letterSpacing: 0.3,
+    borderTopColor: Colors.border,
   },
 });

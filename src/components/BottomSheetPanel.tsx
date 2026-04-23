@@ -10,6 +10,8 @@ import BottomSheet, { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { Clinic } from '../types';
 import { ClinicCard } from './ClinicCard';
 import { Colors } from '../theme/colors';
+import { UIText, FontWeights } from '../theme/typography';
+import { Spacing, Radius, Elevation } from '../theme/spacing';
 
 interface BottomSheetPanelProps {
   clinics: Clinic[];
@@ -111,16 +113,17 @@ export const BottomSheetPanel: React.FC<BottomSheetPanelProps> = ({
 
 const styles = StyleSheet.create({
   sheet: {
-    shadowColor: Colors.primary,
+    ...Elevation.shadowMd,           // shadow card — no border
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
     elevation: 20,
   },
   sheetBackground: {
     backgroundColor: Colors.surfaceElevated,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: Radius.sheet,  // 24px bottom sheet
+    borderTopRightRadius: Radius.sheet,
   },
   handle: {
     backgroundColor: Colors.border,
@@ -128,40 +131,42 @@ const styles = StyleSheet.create({
     height: 4,
   },
   listContent: {
-    paddingBottom: 32,
+    paddingBottom: Spacing.sectionLg,         // 32px bottom
   },
   header: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 4,
+    paddingHorizontal: Spacing.screenHorizontal, // 16px screen margin
+    paddingTop: Spacing.tight,                // 8px top (tight)
+    paddingBottom: Spacing.tight / 2,         // 4px bottom
   },
   headerTitle: {
-    fontSize: 15,
-    fontWeight: '700',
+    ...UIText.subHeadline,           // 15px Medium
+    fontWeight: FontWeights.semiBold,
     color: Colors.textPrimary,
   },
   headerSub: {
-    fontSize: 12,
+    ...UIText.caption,               // 12px Medium
     color: Colors.textMuted,
-    marginTop: 2,
+    marginTop: Spacing.base,
   },
   empty: {
     alignItems: 'center',
-    paddingTop: 48,
-    paddingHorizontal: 32,
+    paddingTop: Spacing.sectionLg + Spacing.section,
+    paddingHorizontal: Spacing.sectionLg,
   },
   emptyIcon: {
     fontSize: 40,
-    marginBottom: 12,
+    marginBottom: Spacing.tightLg,
   },
   emptyTitle: {
-    fontSize: 16,
-    fontWeight: '700',
+    ...UIText.callout,               // 16px Regular
+    fontWeight: FontWeights.semiBold,
     color: Colors.textPrimary,
-    marginBottom: 6,
+    marginBottom: Spacing.tight - 2,
   },
   emptySub: {
-    fontSize: 13,
+    ...UIText.footnote,              // 13px Regular
+    fontFamily: 'Satoshi-Variable',
+    fontWeight: FontWeights.regular,
     color: Colors.textMuted,
     textAlign: 'center',
     lineHeight: 18,

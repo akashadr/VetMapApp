@@ -4,9 +4,10 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  View,
 } from 'react-native';
 import { Colors } from '../theme/colors';
+import { UIText, FontWeights } from '../theme/typography';
+import { Radius } from '../theme/spacing';
 import { SPECIALITIES } from '../data/mockClinics';
 
 interface FilterChipsProps {
@@ -66,32 +67,27 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.surface,
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 7,
+    borderRadius: Radius.card,
+    paddingHorizontal: 16,
+    paddingVertical: 9,
     marginRight: 8,
     borderWidth: 1.5,
-    borderColor: Colors.border,
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
+    borderColor: Colors.primary,
   },
   chipActive: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
+    backgroundColor: Colors.accentBg,
+    borderColor: Colors.accent,
   },
   chipIcon: {
     fontSize: 12,
     marginRight: 5,
   },
   chipLabel: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: Colors.textSecondary,
+    ...UIText.caption,
+    color: Colors.textPrimary,
   },
   chipLabelActive: {
-    color: Colors.textInverse,
+    fontWeight: FontWeights.semiBold,
+    color: Colors.accent,
   },
 });

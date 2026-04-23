@@ -1,46 +1,49 @@
 export const Colors = {
-  // Primary CTA — near-black (Figma: #302F2E)
-  primary: '#302F2E',
-  primaryLight: '#4A4947',
-  primaryDark: '#1A1918',
+  // --- Primitive: Text ---
+  textPrimary: '#302F2E',       // Primary text
+  textSecondary: '#595958',     // Secondary text
+  textTertiary: '#747473',      // Tertiary text
+  textExtra: '#A09F9F',         // Extra text (placeholders, disabled)
+  textInverse: '#FFFFFF',       // Text on dark backgrounds
+  textMuted: '#747473',         // Alias for tertiary
 
-  // Brand blue (Figma: #247AED / #3B87EC)
-  accent: '#247AED',
-  accentLight: '#3B87EC',
-  accentDark: '#1A5FBB',
+  // --- Primitive: CTA & Interactive ---
+  primary: '#302F2E',           // Primary CTA
+  hover: '#1D1C1B',             // Hover state
+  selected: '#1D1C1B',          // Selected state
 
-  // Success green (Figma: #008F5D / #54B492)
-  success: '#008F5D',
-  successLight: '#54B492',
+  // --- Primitive: Brand ---
+  accent: '#247AED',            // Brand Colour 1
+  accentLight: '#3B87EC',       // Brand Colour 2
+  accentBg: '#F2F8FF',          // Brand Colour 3 — light blue bg tint
 
-  // Surface
-  background: '#F5F5F5',
-  surface: '#FFFFFF',
+  // --- Primitive: Card ---
+  surface: '#FFFFFF',           // Card Colour
   surfaceElevated: '#FFFFFF',
+  border: '#EAEAEA',            // Card Boundary Colour
+  borderSelected: '#BFBFBE',    // Card Boundary (when selected)
+  background: '#F5F5F5',
 
-  // Text
-  textPrimary: '#302F2E',
-  textSecondary: '#5A5A5C',
-  textMuted: '#9A9A9C',
-  textInverse: '#FFFFFF',
+  // --- Semantic: Success ---
+  successBg: '#E6F4EF',         // Success Colour 1
+  successLight: '#54B492',      // Success Colour 4
+  success: '#008F5D',           // Success Colour 6
 
-  // Semantic
-  warning: '#D4A017',
-  error: '#C0392B',
+  // --- Semantic: Warning ---
+  warningBg: '#FEF3E9',         // Warning Colour 1
+  warningLight: '#F9AD6C',      // Warning Colour 3
+  warning: '#F68523',           // Warning Colour 6
 
-  // Map pin states — blue brand for default, near-black for selected
+  // --- Semantic: Danger ---
+  error: '#EA3729',             // Danger Colour 6
+
+  // --- Map pins ---
   pinDefault: '#247AED',
   pinSelected: '#302F2E',
   pinText: '#FFFFFF',
 
-  // Borders (Figma: #EAEAEA)
-  border: '#EAEAEA',
-  borderLight: '#F2F2F2',
-
-  // Rating star
-  star: '#F5A623',
-
-  // Overlay
+  // --- Misc ---
+  star: '#F9AD6C',              // Rating star — Warning Colour 3
   overlay: 'rgba(36, 122, 237, 0.08)',
   scrim: 'rgba(0, 0, 0, 0.4)',
 };

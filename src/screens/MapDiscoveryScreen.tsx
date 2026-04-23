@@ -23,7 +23,7 @@ import { SearchBar } from '../components/SearchBar';
 import { FilterChips } from '../components/FilterChips';
 import { Clinic, Coordinates, RootStackParamList } from '../types';
 
-type NavProp = NativeStackNavigationProp<RootStackParamList, 'MapDiscovery'>;
+type NavProp = NativeStackNavigationProp<RootStackParamList>;
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const CLUSTER_DELTA_THRESHOLD = 0.05;
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15, shadowRadius: 6, elevation: 4, zIndex: 10,
   },
-  myLocationIcon: { fontSize: 20 },
+  myLocationIcon: { fontSize: 20 }, // 20px md icon
   cluster: {
     width: 40, height: 40, borderRadius: 20,
     backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center',

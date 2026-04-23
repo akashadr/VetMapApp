@@ -1,45 +1,100 @@
-import { StyleSheet } from 'react-native';
-import { Colors } from './colors';
+export const Fonts = {
+  regular: 'Satoshi-Variable',
+  medium: 'Satoshi-Variable',
+  bold: 'Satoshi-Variable',
+  black: 'Satoshi-Variable',
+};
 
-export const Typography = StyleSheet.create({
-  h1: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-    letterSpacing: -0.5,
+export const FontWeights = {
+  regular: '400' as const,
+  medium: '500' as const,
+  semiBold: '600' as const,
+  bold: '700' as const,
+  black: '900' as const,
+};
+
+// Display typography
+export const Display = {
+  largeTitle: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 34,
+    fontWeight: FontWeights.semiBold,
+    lineHeight: 42,
   },
-  h2: {
+  stat: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 32,
+    fontWeight: FontWeights.semiBold,
+    lineHeight: 40,
+  },
+  title1: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 28,
+    fontWeight: FontWeights.semiBold,
+    lineHeight: 36,
+  },
+  title2: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 22,
+    fontWeight: FontWeights.medium,
+    lineHeight: 28,
+  },
+  title3: {
+    fontFamily: 'Satoshi-Variable',
     fontSize: 20,
-    fontWeight: '600',
-    color: Colors.textPrimary,
-    letterSpacing: -0.3,
+    fontWeight: FontWeights.medium,
+    lineHeight: 24,
   },
-  h3: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: Colors.textPrimary,
+};
+
+// UI Text typography
+export const UIText = {
+  headline: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 17,
+    fontWeight: FontWeights.semiBold,
+    lineHeight: 22,
   },
   body: {
-    fontSize: 14,
-    fontWeight: '400',
-    color: Colors.textPrimary,
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 17,
+    fontWeight: FontWeights.regular,
+    lineHeight: 22,
+  },
+  bodyEmphasis: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 17,
+    fontWeight: FontWeights.medium,
+    lineHeight: 22,
+  },
+  callout: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 16,
+    fontWeight: FontWeights.regular,
+    lineHeight: 24,
+  },
+  subHeadline: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 15,
+    fontWeight: FontWeights.medium,
+    lineHeight: 22,
+  },
+  footnote: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 13,
+    fontWeight: FontWeights.regular,
     lineHeight: 20,
   },
-  bodySmall: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: Colors.textSecondary,
-    lineHeight: 16,
+  footnoteEmphasis: {
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 13,
+    fontWeight: FontWeights.medium,
+    lineHeight: 20,
   },
   caption: {
-    fontSize: 11,
-    fontWeight: '500',
-    color: Colors.textMuted,
-    letterSpacing: 0.3,
+    fontFamily: 'Satoshi-Variable',
+    fontSize: 12,
+    fontWeight: FontWeights.medium,
+    lineHeight: 18,
   },
-  label: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: Colors.textSecondary,
-  },
-});
+};

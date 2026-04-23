@@ -26,7 +26,14 @@ export interface Clinic {
 
 export type FilterType = 'all' | 'open_now' | string;
 
+export type RootTabParamList = {
+  Home: undefined;
+  Tasks: undefined;
+  Appointments: undefined;
+  Documents: undefined;
+};
+
 export type RootStackParamList = {
-  MapDiscovery: undefined;
+  MainTabs: undefined;
   ClinicDetail: { clinic: Clinic };
 };
